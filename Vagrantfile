@@ -128,4 +128,27 @@ Vagrant.configure("2") do |config|
 
     end
   end
+
+  config.vm.define vm_name = "sharenator" do |c|
+    c.vm.box = "hashicorp/precise32"
+
+    c.vm.box_version = nil
+    c.vm.box_url = nil
+    c.vm.hostname = vm_name
+
+    ip = "172.17.8.#{$num_instances+1+100}"
+    c.vm.network :private_network, ip: ip
+
+    c.vm.provider :virtualbox do |v|
+      # On VirtualBox, we don't have guest additions or a functional vboxsf
+      # in CoreOS, so tell Vagrant that so it can be smarter.
+      v.check_guest_additions = false
+      v.functional_vboxsf     = false
+    end
+
+    # plugin conflict
+    if Vagrant.has_plugin?("vagrant-vbguest") then
+      c.vbguest.auto_update = false
+    end
+  end
 end
