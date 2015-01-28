@@ -17,6 +17,7 @@ $share_home = false
 $vm_gui = false
 $vm_memory = 1024
 $vm_cpus = 1
+$ubuntu_id = 100
 
 # Attempt to apply the deprecated environment variable NUM_INSTANCES to
 # $num_instances while allowing config.rb to override it
@@ -111,7 +112,7 @@ Vagrant.configure("2") do |config|
         vb.cpus = vm_cpus
       end
 
-      ip = "172.17.8.#{i+100}"
+      ip = "172.17.8.#{i+$ubuntu_id}"
       config.vm.network :private_network, ip: ip
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.
@@ -136,7 +137,7 @@ Vagrant.configure("2") do |config|
     c.vm.box_url = nil
     c.vm.hostname = vm_name
 
-    ip = "172.17.8.#{$num_instances+1+100}"
+    ip = "172.17.8.#{$ubuntu_id}"
     c.vm.network :private_network, ip: ip
 
     c.vm.provider :virtualbox do |v|
