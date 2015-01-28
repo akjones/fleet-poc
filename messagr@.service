@@ -1,0 +1,17 @@
+[Unit]
+Description=Messagr
+After=docker.service
+After=messagr_config@%i.service
+Wants=messagr_config@%i.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill messagr
+ExecStartPre=-/usr/bin/docker rm -f messagr
+ExecStartPre=/usr/bin/docker pull whereismytaco/messagr
+ExecStart=/usr/bin/docker run --name messagr --rm=true -p 8000:8000 --volumes-from messagr_config whereismytaco/messagr
+ExecStop=/usr/bin/docker stop messagr
+
+[X-Fleet]
+Conflicts=messagr@*.service

@@ -1,0 +1,16 @@
+[Unit]
+Description=Messagr Config
+After=docker.service
+BindsTo=messagr@%i.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill messagr_config
+ExecStartPre=-/usr/bin/docker rm -f messagr_config
+ExecStartPre=/usr/bin/docker pull whereismytaco/configfile
+ExecStart=/usr/bin/docker run --name messagr_config whereismytaco/configfile
+ExecStop=/usr/bin/docker stop messagr_config
+
+[X-Fleet]
+MachineOf=messagr@%i.service
